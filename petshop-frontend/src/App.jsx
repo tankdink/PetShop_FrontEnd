@@ -1,43 +1,60 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import GetAllUserComponent from './components/Admin/GetAllUserComponent'
 import HeaderComponent from './components/Header_Footer/HeaderComponent'
 import FooterComponent from './components/Header_Footer/FooterComponent'
 import Add_EditUserComponent from './components/Admin/Add_EditUserComponent'
-import LoginComponent from './components/Authentication/Login'
+import LoginComponent from './components/Authentication/login'
 import ErrorPageComponent from './components/Error/ErrorPage'
-import LogoutComponent from './components/Authentication/Logout'
 import HomePage from './components/HomePage/Home'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-// DeffaultURL = localhost:3000
+import ProtectedRoute from './components/routes/ProtectedRoutes'
+import SignUpComponent from './components/Authentication/SignUp'
+import ChangeEmail_PasswordComponent from './components/Authentication/ChangeEmail_Password'
 
 function App() {
-  return ( 
+  const location = useLocation();
+  const isAuthRoute = location.pathname === '/login' || location.pathname === '/signup';  
+  return (
     <>
-      <BrowserRouter> 
-          <HeaderComponent />
+      {!isAuthRoute && <HeaderComponent />}
+      
+      <Routes>
+        {/* PUBLIC PATH */}
+        <Route path='/' element={<HomePage />} />
+        <Route path='/home' element={<HomePage />} />
+        <Route path='/login' element={<LoginComponent />} />
+        <Route path='/signup' element={<SignUpComponent />} />
+        <Route path='/changeEmail' element={<ChangeEmail_PasswordComponent />} />
+        <Route path='/changePassword' element={<ChangeEmail_PasswordComponent />} />
+        <Route path='/error' element={<ErrorPageComponent />} />
+        <Route path='*' element={<ErrorPageComponent />} />
 
-              <Routes>
-                  <Route path='/' element= { <GetAllUserComponent /> }> </Route>
-                  <Route path='/home' element= { <HomePage /> }> </Route>
-                  <Route path='/userList' element= { <GetAllUserComponent /> }> </Route>
-                  <Route path='/addUser' element= { <Add_EditUserComponent /> }> </Route>
-                  <Route path='/updateUser/:id' element= { <Add_EditUserComponent /> }> </Route>
-                  <Route path='/login' element= { <LoginComponent /> }> </Route>
-                  <Route path='/logout' element= { <LogoutComponent /> }> </Route>
-                  <Route path='*' element= { <ErrorPageComponent /> }> </Route>
-                  
-              </Routes>
-            <ToastContainer />
-          <FooterComponent />
-      </BrowserRouter>
+        {/* ADMIN PATH */}
+        <Route 
+          path='/admin/userList' 
+          element={<ProtectedRoute element={GetAllUserComponent} requiredRole="ROLE_ADMIN" />} 
+        />
+        <Route 
+          path='/admin/addUser' 
+          element={<ProtectedRoute element={Add_EditUserComponent} requiredRole="ROLE_ADMIN" />} 
+        />
+        <Route 
+          path='/updateUser/:id' 
+          element={<ProtectedRoute element={Add_EditUserComponent} requiredRole={["ROLE_ADMIN", "ROLE_USER", "ROLE_ACCOUNT_MANAGER"]} />} 
+        />
+        <Route 
+          path='/changeInfo/updateUser/:id' 
+          element={<ProtectedRoute element={Add_EditUserComponent} requiredRole={["ROLE_ADMIN", "ROLE_USER", "ROLE_ACCOUNT_MANAGER"]} />} 
+        />
+      </Routes>
+      
+      <ToastContainer />
+      
+      {!isAuthRoute && <FooterComponent />}
     </>
-  )
+  );
 }
 
-export default App
+export default App;

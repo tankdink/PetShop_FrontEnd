@@ -9,7 +9,7 @@ export const GetAllUserComponent = () =>
     const [user, setUser] = useState([])
     const [userLoggedIn, setUserLoggedIn] = useState({})
 
-    const nagivator = useNavigate();
+    const navigator = useNavigate();
 
     useEffect(()=>
         {
@@ -21,7 +21,7 @@ export const GetAllUserComponent = () =>
             setUserLoggedIn(response.data);
         })
         .catch(error => {
-            console.error("Error fetching user data:", error);
+            console.error("JWT is expired:", error.response.data);
         });
     }, []);
 
@@ -32,18 +32,25 @@ export const GetAllUserComponent = () =>
             setUser(respose.data);
         }).catch(error => 
             {
-                console.error(error);
+                console.log(error.response.data);
             })
     }
 
     function addUser() 
     {
-        nagivator('/addUser')
+        navigator('/admin/addUser')
     }
+
+    function goBack() 
+    {
+        navigator('/home')
+    }
+
     function updateUser(userID) 
     {
-        nagivator(`/updateUser/${userID}`)
+        navigator(`/updateUser/${userID}`)
     }
+
     function deleteUser(userID) 
     {
         deleteUserById(userID).then((respose)=>
@@ -58,8 +65,8 @@ export const GetAllUserComponent = () =>
     
   return (
     <div className='container'>
-        <p>{userLoggedIn?.email}--{userLoggedIn?.password}-{userLoggedIn.role?.name}</p>
         <h1 className='text-center'>User(s) List</h1>
+        <button className='btn btn-primary' onClick={goBack}>Back to Shop</button>
         <button className='btn btn-primary' onClick={addUser}>Add new User</button>
         <table className='table table-striped table-hover'>
             <thead>
@@ -80,8 +87,13 @@ export const GetAllUserComponent = () =>
                             <td> {user.lastName} </td>
                             <td> {user.email} </td>
                             <td>
-                                <button className='btn btn-info' onClick={()=>updateUser(user.id)}>Update</button>
-                                <button className='btn btn-info' onClick={()=>deleteUser(user.id)}>Delete</button>
+                                    { user.id !== userLoggedIn.id && (
+                                            <>
+                                                <button className='btn btn-info' onClick={() => updateUser(user.id)}>Update</button>
+                                                <button className='btn btn-danger' onClick={() => deleteUser(user.id)}>Delete</button>
+                                            </>
+                                        )
+                                    }       
                             </td>
                         </tr>
                     )

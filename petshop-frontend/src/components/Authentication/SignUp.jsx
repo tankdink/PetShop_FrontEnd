@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { useAuthorz } from '../contexts/AuthorzContext';
 import { loggedInData } from '../../services/Authentication';
 
-const LoginComponent = () => {
+const SignUpComponent = () => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -36,8 +36,8 @@ const LoginComponent = () => {
             <div className='row'>
                 <div className='card col-md-6 offset-md-3 mb-5'>
                     <br></br>
-                    <h1>Log in</h1>
-                    <button className='btn btn-info float-end' onClick={() => navigator("/signup")}>Sign Up</button>
+                    <h1>Sign Up</h1>
+                    <button className='btn btn-info float-end' onClick={() => navigator("/login")}>Back</button>
                     <div className='card-body'>
                             <form>
                                 <div className='form-group mb-3'>
@@ -74,4 +74,4 @@ const LoginComponent = () => {
     )
 }
 
-export default LoginComponent
+export default SignUpComponent

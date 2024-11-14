@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import React, { useEffect, useState, useRef } from 'react'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { addUser, getUserById, updateUser } from '../../services/UserService'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuthorz } from '../contexts/AuthorzContext';
 
 
 const Add_EditUserComponent = () => {
@@ -10,6 +11,12 @@ const Add_EditUserComponent = () => {
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('')
+    const {userLoggedIn_, userRole} = useAuthorz();
+    const navigator = useNavigate();
+    const isFirstRender = useRef(true);
+    const {id} = useParams();
+    const location = useLocation();
+    const isNavigatedFromHomepage = location.pathname.startsWith("/changeInfo");
 
     const [errors, setErrors] = useState(
         {
@@ -18,10 +25,6 @@ const Add_EditUserComponent = () => {
             email: ''
         }
     )
-
-    const nagivator = useNavigate();
-
-    const {id} = useParams();
 
 
 
@@ -35,7 +38,13 @@ const Add_EditUserComponent = () => {
                 setEmail(respose.data.email);
             }).catch(error => 
                 {
-                    console.error(error);
+                    if (isFirstRender.current)
+                    {
+                        isFirstRender.current=false;
+                        console.error(error);
+                        toast.error(error.response.data);
+                        navigator("/");
+                    }
                 })
         }
     },[id])
@@ -63,7 +72,7 @@ const Add_EditUserComponent = () => {
             errorsCopy.firstName = '';
         }
 
-        if (lastName.trim() == false)
+        if (lastName.trim() == false || lastName == null)
         {
             errorsCopy.lastName = 'Last name is required!';
             valid = false;
@@ -73,7 +82,7 @@ const Add_EditUserComponent = () => {
             errorsCopy.lastName = '';
         }
 
-        if (email.trim() == false)
+        if (email.trim() == false || email == null)
         {
             errorsCopy.email = 'Email is required!';
             valid = false;
@@ -99,18 +108,18 @@ const Add_EditUserComponent = () => {
         {
             if (id)
             {
-                const newUserInfo = {firstName, lastName, email}
+                const newUserInfo = {firstName : firstName.trim(), lastName : lastName.trim(), email}
                 updateUser(id,newUserInfo).then((response) =>
                 {
-                    
-                    nagivator('/');
+                    goBack();
+                    toast.success("Change information successfully!");
                     console.log(response.data);
                 }).catch(error => 
                     {
                         const errorsCopy = {... errors};
                         errorsCopy.firstName = "";
                         errorsCopy.lastName = "";
-                        errorsCopy.email = "Email has been used!";
+                        errorsCopy.email = error.response?.data;
                         setErrors(errorsCopy);
                         console.error(error);
                     })
@@ -138,7 +147,8 @@ const Add_EditUserComponent = () => {
 
     function goBack()
     {
-        nagivator('/');
+        if (location.pathname.startsWith("/admin") || !location.pathname.startsWith("/changeInfo")) navigator("/admin/userList");
+        else navigator('/');
     }
 
     function pageTitle()
@@ -149,7 +159,7 @@ const Add_EditUserComponent = () => {
 
     return (
         <div className='container'>
-        <br></br>
+        <br></br> 
         <br></br>
         <br></br>
             <div className='row'>
@@ -159,6 +169,29 @@ const Add_EditUserComponent = () => {
                     <div className='card-body'>
                         <form>
                             <div className='form-group mb-3'>
+                                {!id && 
+                                    <>
+                                        <label className='form-label'>User's email:</label>
+                                        <input 
+                                            type='text'
+                                            placeholder='Enter user&apos;s email'
+                                            name='email'
+                                            value={email}
+                                            className={`form-control mb-2 ${ errors.email ? 'is-invalid' : ''}`}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            required
+                                        >
+                                        </input>
+                                        { errors.email && <div className='invalid-feedback'> {errors.email} </div>}
+                                    </>
+                                }
+                                {id && isNavigatedFromHomepage ?  
+                                    <div>
+                                        <button className='btn btn-primary' onClick={() => navigator("/changeEmail")}>Change Email</button>
+                                        <button className='btn btn-primary' onClick={() => navigator("/changePassword")}>Change Password</button>
+                                    </div>
+                                    : ""
+                                }
                                 <label className='form-label'>User's first name:</label>
                                 <input 
                                     type='text'
@@ -167,6 +200,7 @@ const Add_EditUserComponent = () => {
                                     value={firstName}
                                     className={`form-control mb-2 ${ errors.firstName ? 'is-invalid' : ''}`}
                                     onChange={(e) => setFirstName(e.target.value)}
+                                    required
                                 >
                                 </input>
                                 { errors.firstName && <div className='invalid-feedback'> {errors.firstName} </div>}
@@ -178,20 +212,10 @@ const Add_EditUserComponent = () => {
                                     value={lastName}
                                     className={`form-control mb-2 ${ errors.lastName ? 'is-invalid' : ''}`}
                                     onChange={(e) => setLastName(e.target.value)}
+                                    required
                                 >
                                 </input>
                                 { errors.lastName && <div className='invalid-feedback'> {errors.lastName} </div>}
-                                <label className='form-label'>User's email:</label>
-                                <input 
-                                    type='text'
-                                    placeholder='Enter user&apos;s email'
-                                    name='email'
-                                    value={email}
-                                    className={`form-control mb-2 ${ errors.email ? 'is-invalid' : ''}`}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                >
-                                </input>
-                                { errors.email && <div className='invalid-feedback'> {errors.email} </div>}
                             </div>
                             <button className='btn btn-primary' onClick={goBack}>Go Back</button>
                             <button className='btn btn-success float-end' onClick={add_editUser}>Submit</button>
@@ -199,6 +223,7 @@ const Add_EditUserComponent = () => {
                     </div>
                 </div>
             </div>
+            <br></br>
         </div>
     )
 }
