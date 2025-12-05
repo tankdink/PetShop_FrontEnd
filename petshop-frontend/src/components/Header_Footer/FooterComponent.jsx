@@ -1,14 +1,12 @@
-import React from 'react'
+import React from 'react';
+import "./Footer.css";
 
 const FooterComponent = () => {
-
   return (
-    <div>
-        <footer className='navbar navbar-dark bg-primary'>
-            <span>All right reserved 2024 by TaNkDiNk</span>
-        </footer>
-    </div>
-  )
-}
+    <footer className="footer bg-primary text-white text-center py-3">
+      <span className="fw-bold">All rights reserved 2024 by TaNkDiNk</span>
+    </footer>
+  );
+};
 
-export default FooterComponent
+export default FooterComponent;

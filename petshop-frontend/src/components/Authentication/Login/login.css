@@ -1,0 +1,14 @@
+.container {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+.card {
+    border-radius: 8px;
+}
+.btn-link {
+    color: #007bff;
+    text-decoration: none;
+}
+.btn-link:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,35 @@
+/* styles.css */
+
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+  }
+  
+.navbar-brand {
+font-size: 1.5rem;
+color: #ffffff !important;
+}
+
+.modal-content {
+border-radius: 8px;
+}
+
+.modal-header {
+background-color: #007bff;
+color: #fff;
+}
+
+.modal-footer {
+justify-content: flex-end;
+}
+
+.btn-primary, .btn-info {
+margin-right: 10px;
+}
+
+
+.btn-text-white:hover
+{
+    color: #fff !important;
+}
+  

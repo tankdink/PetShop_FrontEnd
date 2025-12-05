@@ -18,11 +18,9 @@ const ProtectedRoute = ({ element: Component, requiredRole, ...rest }) => {
         console.log("Error role 2");
         return <Navigate to="/error" replace />;
     }
-    
-    if ((userRole === "ROLE_USER" || userRole === "ROLE_ACCOUNT_MANAGER") && userLoggedIn_.id !== parseInt(id)) 
-    {
+    else if ((userRole === "ROLE_USER" || userRole === "ROLE_ACCOUNT_MANAGER") && id !== undefined && userLoggedIn_.id !== parseInt(id)) 
+    {   
         console.log("Error role 3");
-        console.log(userLoggedIn_.id !== parseInt(id));
         return <Navigate to="/error" replace />;
     }
 

@@ -1,0 +1,11 @@
+/* Ensure the icon buttons don't disrupt the input field layout */
+.input-group-append .btn {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+  }
+  
+  .input-group-append .btn:hover {
+    color: #007bff;
+  }
+  

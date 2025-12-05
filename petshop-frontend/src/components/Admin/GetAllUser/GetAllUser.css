@@ -1,0 +1,148 @@
+.container {
+    margin-top: 30px;
+  }
+  
+h1 {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+button {
+  margin-right: 10px;
+}
+
+.table thead {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.modal-content {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+.modal-title {
+  font-weight: bold;
+}
+
+/* Center all header and cell content */
+.table th:nth-child(7), .table td:nth-child(7)
+{
+  text-align: center;
+}
+
+/* Fix each row’s height */
+.table > tbody > tr {
+  height: 55px;
+  vertical-align: middle;
+}
+
+/* Hide scrollbars in WebKit and Firefox */
+.table td::-webkit-scrollbar {
+  display: none;
+}
+.table td {
+  scrollbar-width: none;
+}
+
+/* Fixed column widths with horizontal scrolling for overflow text */
+
+/* User ID column (1st column) */
+.table th:nth-child(1),
+.table td:nth-child(1) {
+  width: 80px;
+  max-width: 80px;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+/* First Name column (2nd column) */
+.table th:nth-child(2),
+.table td:nth-child(2) {
+  width: 125px;
+  max-width: 125px;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+/* Last Name column (3rd column) */
+.table th:nth-child(3),
+.table td:nth-child(3) {
+  width: 125px;
+  max-width: 125px;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+/* Email column (4th column) */
+.table th:nth-child(4),
+.table td:nth-child(4) {
+  width: 205px;
+  max-width: 205px;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+/* Status column (5th column) */
+.table th:nth-child(5),
+.table td:nth-child(5) {
+  width: 105px;
+  max-width: 105px;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+/* Role column (6th column) */
+.table th:nth-child(6),
+.table td:nth-child(6) {
+  width: 125px;
+  max-width: 125px;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+/* Actions column (7th column) */
+.table th:nth-child(7),
+.table td:nth-child(7) {
+  width: 220px;
+  max-width: 220px;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+
+/* Loading */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+
+
+
+  
+  
